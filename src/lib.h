@@ -40,7 +40,11 @@ struct efi_var_operations {
 			       uint32_t attributes);
 };
 
+#ifdef FORCE_32BIT_EBM_RUN_ON_64BIT_OS
+typedef uint64_t efi_status_t;
+#else
 typedef unsigned long efi_status_t;
+#endif
 
 extern struct efi_var_operations vars_ops;
 extern struct efi_var_operations efivarfs_ops;
