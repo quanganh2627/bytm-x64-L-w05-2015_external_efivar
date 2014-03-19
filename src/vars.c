@@ -77,7 +77,7 @@ read_fd(int fd, uint8_t **buf, size_t *bufsize)
 }
 
 static int
-get_size_from_file(const char *filename, size_t *retsize)
+get_size_from_file(const char *filename, long long int *retsize)
 {
 	uint8_t *buf = NULL;
 	size_t bufsize = -1;
@@ -132,11 +132,11 @@ vars_get_variable_size(efi_guid_t guid, const char *name, size_t *size)
 	if (rc < 0)
 		goto err;
 
-	size_t retsize = 0;
+	long long int retsize = 0;
 	rc = get_size_from_file(path, &retsize);
 	if (rc >= 0) {
 		ret = 0;
-		*size = retsize;
+		*size = (size_t) retsize;
 	}
 err:
 	errno_value = errno;
@@ -272,7 +272,7 @@ vars_set_variable(efi_guid_t guid, const char *name, uint8_t *data,
 {
 	int errno_value;
 	int ret = -1;
-
+	int i = 0;
 	if (strlen(name) > 1024) {
 		errno = EINVAL;
 		return -1;
@@ -304,7 +304,7 @@ vars_set_variable(efi_guid_t guid, const char *name, uint8_t *data,
 		.Status = 0,
 		.Attributes = attributes
 		};
-	for (int i = 0; name[i] != '\0'; i++)
+	for (i = 0; name[i] != '\0'; i++)
 		var.VariableName[i] = name[i];
 	memcpy(var.Data, data, data_size);
 

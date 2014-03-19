@@ -115,13 +115,14 @@ static void libefivar_init(void) __attribute__((constructor));
 static void
 libefivar_init(void)
 {
+	int i;
 	struct efi_var_operations *ops_list[] = {
 		&efivarfs_ops,
 		&vars_ops,
 		&default_ops,
 		NULL
 	};
-	for (int i = 0; ops_list[i] != NULL; i++)
+	for (i = 0; ops_list[i] != NULL; i++)
 	{
 		if (ops_list[i]->probe()) {
 			ops = ops_list[i];

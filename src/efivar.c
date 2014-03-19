@@ -67,7 +67,7 @@ list_all_variables(void)
 static void
 parse_name(const char *guid_name, char **name, efi_guid_t *guid)
 {
-	int guid_len = strlen("84be9c3e-8a32-42c0-891c-4cd3b072becc");
+	unsigned int guid_len = strlen("84be9c3e-8a32-42c0-891c-4cd3b072becc");
 	char guid_buf[guid_len + 1];
 	char *name_buf = NULL;
 	int name_len;
@@ -107,6 +107,7 @@ show_variable(char *guid_name)
 	efi_guid_t guid;
 	char *name = NULL;
 	int rc;
+	int i = 0;
 
 	uint8_t *data = NULL;
 	size_t data_size = 0;
@@ -127,7 +128,7 @@ show_variable(char *guid_name)
 			guid.e[4], guid.e[5]);
 	printf("Name: \"%s\"\n", name);
 	printf("Attributes:\n");
-	for (int i = 0; attribute_names[i][0] != '\0'; i++) {
+	for (i = 0; attribute_names[i][0] != '\0'; i++) {
 		if(attributes & (1 << i))
 			printf("\t%s\n", attribute_names[i]);
 	}
@@ -241,7 +242,7 @@ int main(int argc, char *argv[])
 	char *file = NULL;
 	poptContext optCon;
 	struct poptOption options[] = {
-		{NULL, '\0', POPT_ARG_INTL_DOMAIN, "efivar" },
+		{NULL, '\0', POPT_ARG_INTL_DOMAIN, "efivar", 0, NULL, NULL },
 		{"list", 'l', POPT_ARG_VAL, &action,
 		 ACTION_LIST, "list current variables", NULL },
 		{"print", 'p', POPT_ARG_VAL, &action,
